@@ -95,11 +95,13 @@ const gameController = (
     const players = [
         {
             name: playerOneName,
-            mark: 'X'
+            mark: 'X',
+            victory: false
         },
         {
             name: playerTwoName,
-            mark: 'O'
+            mark: 'O',
+            victory: false
         }
     ];
 
@@ -111,9 +113,13 @@ const gameController = (
 
     const getActivePlayer = () => activePlayer;
 
+    const getVictory = (player) => player.victory;
+
+    const checkVictories = () => players[0].victory || players[1].victory;
+
     const printNewRound = () => {
         gameBoard.printBoard();
-        console.log(`${getActivePlayer().name}'s turn.`);
+        //console.log(`${getActivePlayer().name}'s turn.`);
     }
 
     const playRound = (row, column) => {
@@ -121,24 +127,28 @@ const gameController = (
         let result = gameBoard.markSpot(column, row, getActivePlayer().mark);
 
         if (result === 1) {
-            console.log(`location column:${column} and row:${row} is taken, please try a different spot.`);
+            //console.log(`location column:${column} and row:${row} is taken, please try a different spot.`);
         } else {
             switchPlayerTurn();
         }
         
-        if (gameBoard.checkWinner('X') === 1) {
-            console.log("X WINS");
+        if (gameBoard.checkWinner('X') === 1 && players[1].victory === false) {
+            players[0].victory = true;
+            //console.log("X WINS");
         }
-        else if (gameBoard.checkWinner('O') === 1){
-            console.log("O WINS");
+        else if (gameBoard.checkWinner('O') === 1 && players[0].victory === false){
+            players[1].victory = true;
+            //console.log("O WINS");
         }
         
-        printNewRound();
+        //printNewRound();
     }
 
     return {
         playRound,
-        getActivePlayer
+        getActivePlayer,
+        getVictory,
+        checkVictories
     };
 };
 
@@ -150,8 +160,6 @@ function ScreenController() {
         boardDiv.textContent = '';
 
         const board = gameBoard.getBoard();
-        const activePlayer = game.getActivePlayer();
-
         board.forEach((row, rindex) => {
             row.forEach((cell, cindex) => {
 
@@ -165,11 +173,26 @@ function ScreenController() {
         });
     }
 
+    const victory = document.querySelector('.victory');
     boardDiv.addEventListener('click', (event) => {
-        const selectedRow = event.target.dataset.row;
-        const selectedColumn = event.target.dataset.column;
-        game.playRound(selectedRow, selectedColumn);
-        updateScreen();
+        if (game.checkVictories() === false) {
+            const currentPlayer = game.getActivePlayer();
+            const selectedRow = event.target.dataset.row;
+            const selectedColumn = event.target.dataset.column;
+            
+            game.playRound(selectedRow, selectedColumn);
+            //console.log(`getvictory: ${game.getVictory(currentPlayer)}`);
+            if (game.getVictory(currentPlayer) === true && victory.textContent === ''){
+                
+                const winner = document.createElement('div');
+                winner.classList.add('winner');
+                winner.textContent = `${currentPlayer.name} has won!`;
+                victory.appendChild(winner);
+                updateScreen();
+                return;
+            }
+            updateScreen();
+        } 
     });
 
     updateScreen();

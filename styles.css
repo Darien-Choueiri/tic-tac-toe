@@ -51,3 +51,13 @@ body {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
+.victory {
+    display: flex;
+    justify-content: center;
+}
+
+.winner {
+    color: white;
+    font-size: 3rem;
+    padding: 20px;
+}
