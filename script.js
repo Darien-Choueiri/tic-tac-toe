@@ -117,6 +117,11 @@ const gameController = (
 
     const getActivePlayer = () => activePlayer;
 
+    const resetVictories = () => {
+            players[0].victory = false;
+            players[1].victory = false;
+    }
+
     const getVictory = (player) => player.victory;
 
     const checkVictories = () => players[0].victory || players[1].victory;
@@ -131,28 +136,29 @@ const gameController = (
         let result = gameBoard.markSpot(column, row, getActivePlayer().mark);
 
         if (result === 1) {
-            //console.log(`location column:${column} and row:${row} is taken, please try a different spot.`);
+            console.log(`location column:${column} and row:${row} is taken, please try a different spot.`);
         } else {
             switchPlayerTurn();
         }
         
         if (gameBoard.checkWinner('X') === 1 && players[1].victory === false) {
             players[0].victory = true;
-            //console.log("X WINS");
+            console.log("X WINS");
         }
         else if (gameBoard.checkWinner('O') === 1 && players[0].victory === false){
             players[1].victory = true;
-            //console.log("O WINS");
+            console.log("O WINS");
         }
         
-        //printNewRound();
+        printNewRound();
     }
 
     return {
         playRound,
         getActivePlayer,
         getVictory,
-        checkVictories
+        checkVictories,
+        resetVictories
     };
 };
 
@@ -202,6 +208,9 @@ function ScreenController() {
     const reset = document.querySelector('.game > button');
     reset.addEventListener('click', (event) => {
         gameBoard.clearBoard();
+        const victory = document.querySelector('.victory');
+        victory.textContent = '';
+        game.resetVictories();
         updateScreen();
     });
 
