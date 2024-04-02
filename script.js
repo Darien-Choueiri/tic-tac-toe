@@ -72,7 +72,19 @@ const gameBoard = (function() {
 
     }
 
-    return { markSpot, printBoard, checkWinner, getBoard, clearBoard};
+    const checkFull = () => {
+        let count = 0;
+        for (let i = 0; i < rows; i++){
+            for (let j = 0; j < columns; j++) {
+                if (board[i][j].getValue() != null){
+                    count += 1;
+                }
+            }
+        }
+        return count === rows*columns ? 1 : 0;
+    }
+
+    return { markSpot, printBoard, checkWinner, getBoard, clearBoard, checkFull};
 })();
 
 function Cell() {
@@ -128,7 +140,6 @@ const gameController = (
 
     const printNewRound = () => {
         gameBoard.printBoard();
-        //console.log(`${getActivePlayer().name}'s turn.`);
     }
 
     const playRound = (row, column) => {
@@ -191,7 +202,6 @@ function ScreenController() {
             const selectedColumn = event.target.dataset.column;
             
             game.playRound(selectedRow, selectedColumn);
-            //console.log(`getvictory: ${game.getVictory(currentPlayer)}`);
             if (game.getVictory(currentPlayer) === true && victory.textContent === ''){
                 
                 const winner = document.createElement('div');
@@ -199,14 +209,21 @@ function ScreenController() {
                 winner.textContent = `${currentPlayer.name} has won!`;
                 victory.appendChild(winner);
                 updateScreen();
-                return;
             }
+
+            if (gameBoard.checkFull() === 1 && game.checkVictories() === false) {
+                const tie = document.createElement('div');
+                tie.classList.add('winner');
+                tie.textContent = `It's a tie!`;
+                victory.appendChild(tie);
+                updateScreen();
+            } 
             updateScreen();
         } 
     });
 
     const reset = document.querySelector('.game > button');
-    reset.addEventListener('click', (event) => {
+    reset.addEventListener('click', () => {
         gameBoard.clearBoard();
         const victory = document.querySelector('.victory');
         victory.textContent = '';
