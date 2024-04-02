@@ -10,6 +10,10 @@ const gameBoard = (function() {
         }
     }
 
+    const clearBoard = () => {
+        board.map((row) => row.map((cell) => cell.addMark(null)));
+    };
+
     const getBoard = () => board;
 
     const markSpot = (column, row, player) => {
@@ -68,7 +72,7 @@ const gameBoard = (function() {
 
     }
 
-    return { markSpot, printBoard, checkWinner, getBoard};
+    return { markSpot, printBoard, checkWinner, getBoard, clearBoard};
 })();
 
 function Cell() {
@@ -193,6 +197,12 @@ function ScreenController() {
             }
             updateScreen();
         } 
+    });
+
+    const reset = document.querySelector('.game > button');
+    reset.addEventListener('click', (event) => {
+        gameBoard.clearBoard();
+        updateScreen();
     });
 
     updateScreen();

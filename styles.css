@@ -27,7 +27,9 @@ body {
 .game {
     width: 100vw;
     display: flex;
-    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .board {
@@ -60,4 +62,22 @@ body {
     color: white;
     font-size: 3rem;
     padding: 20px;
+}
+
+.game > button {
+    width: 180px;
+    padding: 5px 0px;
+    border-radius: 5px;
+    font-size: 2rem;
+    border: none;
+    color: rgb(186, 73, 73);
+}
+
+.game > button:hover {
+    filter: brightness(85%);
+    cursor: pointer;
+}
+
+.game > button:active {
+    border: 2px solid rgb(186, 73, 73);
 }
