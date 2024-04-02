@@ -10,6 +10,8 @@ const gameBoard = (function() {
         }
     }
 
+    const getBoard = () => board;
+
     const markSpot = (column, row, player) => {
 
         //checks if spot is already marked
@@ -66,7 +68,7 @@ const gameBoard = (function() {
 
     }
 
-    return { markSpot, printBoard, checkWinner};
+    return { markSpot, printBoard, checkWinner, getBoard};
 })();
 
 function Cell() {
@@ -86,10 +88,10 @@ function Cell() {
     };
 }
 
-const gameController = (function(
+const gameController = (
     playerOneName = 'Player One',
     playerTwoName = 'Player Two'
-) {
+) => {
     const players = [
         {
             name: playerOneName,
@@ -135,6 +137,42 @@ const gameController = (function(
     }
 
     return {
-        playRound
+        playRound,
+        getActivePlayer
     };
-})();
+};
+
+function ScreenController() {
+    const game = gameController();
+    const boardDiv = document.querySelector('.board');
+
+    const updateScreen = () => {
+        boardDiv.textContent = '';
+
+        const board = gameBoard.getBoard();
+        const activePlayer = game.getActivePlayer();
+
+        board.forEach((row, rindex) => {
+            row.forEach((cell, cindex) => {
+
+                const tile = document.createElement('div');
+                tile.classList.add('cell');
+                tile.dataset.row = rindex;
+                tile.dataset.column = cindex;
+                tile.textContent = cell.getValue();
+                boardDiv.appendChild(tile);
+            });
+        });
+    }
+
+    boardDiv.addEventListener('click', (event) => {
+        const selectedRow = event.target.dataset.row;
+        const selectedColumn = event.target.dataset.column;
+        game.playRound(selectedRow, selectedColumn);
+        updateScreen();
+    });
+
+    updateScreen();
+}
+
+ScreenController();
