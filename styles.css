@@ -33,6 +33,7 @@ body {
 }
 
 .board {
+    grid-column: 2 / 3;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 3fr);
@@ -80,4 +81,38 @@ body {
 
 .game > button:active {
     border: 2px solid rgb(186, 73, 73);
+}
+
+.main {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.names {
+    display: flex;
+    flex-direction: column;
+    color: white;
+    font-size: 2rem;
+    gap: 30px;
+    justify-content: center;
+    padding: 30px;
+}
+
+input {
+    outline: none;
+    border: none;
+    color: rgb(186, 73, 73);
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 1.3rem;
+    height: 10px;
+}
+
+input:focus {
+    outline: rgba(0, 0, 0, 0.4) solid 3px;
+}
+
+label {
+    display: flex;
+    gap: 10px;
 }

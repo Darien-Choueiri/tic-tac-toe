@@ -105,8 +105,8 @@ function Cell() {
 }
 
 const gameController = (
-    playerOneName = 'Player One',
-    playerTwoName = 'Player Two'
+    playerOneName = 'playerOne',
+    playerTwoName = 'playerTwo'
 ) => {
     const players = [
         {
@@ -174,6 +174,8 @@ const gameController = (
 };
 
 function ScreenController() {
+    
+
     const game = gameController();
     const boardDiv = document.querySelector('.board');
 
@@ -206,7 +208,9 @@ function ScreenController() {
                 
                 const winner = document.createElement('div');
                 winner.classList.add('winner');
-                winner.textContent = `${currentPlayer.name} has won!`;
+                const name = document.querySelector(`#${currentPlayer.name}`).value;
+                console.log(`name: ${name}`);
+                winner.textContent = `${name} has won!`;
                 victory.appendChild(winner);
                 updateScreen();
             }
